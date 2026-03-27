@@ -135,7 +135,34 @@ namespace papirgyujtes
 
                 //7. feldat
 
-                
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("7. feladat: A legtöbb papírt gyűjtő 10 tanuló jutalomban részesül. Készítsen lekérdezést, amely \nmegadja ezen tanulók nevét, osztályát és azt, hogy mekkora mennyiségű papírt gyűjtöttek! \nAz eredményt rendezze a gyűjtött mennyiség szerint csökkenő rendbe!");
+                Console.WriteLine();
+
+                parancs = @"
+                SELECT tanulok.nev, tanulok.osztaly, SUM(leadasok.mennyiseg) AS osszesen
+                FROM tanulok
+                JOIN leadasok ON leadasok.tanulo = tanulok.tazon
+                GROUP BY tanulok.nev, tanulok.osztaly
+                ORDER BY osszesen DESC
+                LIMIT 10;
+                ";
+
+                using (MySqlCommand cmd = new MySqlCommand(parancs, conn))
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    Console.WriteLine($"| {"Név",-20} | {"Osztály",-20} | {"Összesen",-20} |");
+                    Console.WriteLine(new string('-', 70));
+
+                    while (reader.Read())
+                    {
+                        Console.WriteLine($"| {reader["nev"],-20} | {reader["osztaly"],-20} | {reader["osszesen"],-20} |");
+                    }
+                }
+                Console.WriteLine(new string('-', 70));
+                Console.WriteLine();
+
             }
         }
     }
