@@ -104,10 +104,38 @@ namespace papirgyujtes
 
 
                 //6. feladat
-                
+
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("6. feladat:\nKészítsen lekérdezést, amely megadja, hogy osztályonként hány mázsa papírt gyűjtöttek a \ntanulók (1 mázsa = 10000 dkg)! Az eredményt rendezze a gyűjtött mennyiség szerint \ncsökkenő rendbe!");
+                Console.WriteLine();
+
+                parancs = @"
+                SELECT tanulok.osztaly, SUM(leadasok.mennyiseg) / 10000 AS mazsa
+                FROM tanulok
+                JOIN leadasok ON leadasok.tanulo = tanulok.tazon
+                GROUP BY tanulok.osztaly
+                ORDER BY mazsa DESC;
+                ";
+
+                using (MySqlCommand cmd = new MySqlCommand(parancs, conn))
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    Console.WriteLine($"| {"Osztály",-30} | {"Mázsa",-20} |");
+                    Console.WriteLine(new string('-', 57));
+
+                    while (reader.Read())
+                    {
+                        Console.WriteLine($"| {reader["osztaly"],-30} | {reader["mazsa"],-20} |");
+                    }
+                }
+                Console.WriteLine(new string('-', 57));
+                Console.WriteLine();
+
 
                 //7. feldat
 
+                
             }
         }
     }
