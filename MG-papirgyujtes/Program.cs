@@ -53,14 +53,14 @@ namespace papirgyujtes
                 Console.WriteLine("4. feladat: \nListázza ki, hogy az átvételre megjelölt napokon átlagosan mennyi papírt adtak le! A \nszámított mező címkéje „napi atlag” legyen!");
                 Console.WriteLine();
 
-                string sql_script = @"
+                parancs = @"
                 SELECT leadasok.idopont, AVG(leadasok.mennyiseg) AS atlag
                 FROM leadasok
                 GROUP BY leadasok.idopont
                 ORDER BY leadasok.idopont ASC;
                 ";
 
-                using (MySqlCommand cmd = new MySqlCommand(sql_script, conn))
+                using (MySqlCommand cmd = new MySqlCommand(parancs, conn))
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     Console.WriteLine($"| {"Időpont",-30} | {"Napi átlag",-20} |");
@@ -73,9 +73,38 @@ namespace papirgyujtes
                 }
                 Console.WriteLine(new string('-', 57));
                 Console.WriteLine();
+
+
                 //5. feladat
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("5. feladat:\nKészítsen lekérdezést, amely kilistázza, mely osztályokból adtak le papírt 2016. október 28-\r\nán! A listában minden osztály azonosítója csak egyszer szerepeljen növekvő sorrendben!");
+                Console.WriteLine();
+
+                parancs = @"
+                SELECT tanulok.osztaly
+                FROM tanulok
+                JOIN leadasok ON leadasok.tanulo = tanulok.tazon
+                GROUP BY tanulok.osztaly;
+                ";
+
+                using (MySqlCommand cmd = new MySqlCommand(parancs, conn))
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    Console.WriteLine($"| {"Osztály",-10} |");
+                    Console.WriteLine(new string('-', 14));
+
+                    while (reader.Read())
+                    {
+                        Console.WriteLine($"| {reader["osztaly"],-10} |");
+                    }
+                }
+                Console.WriteLine(new string('-', 14));
+                Console.WriteLine();
+
 
                 //6. feladat
+                
 
                 //7. feldat
 
